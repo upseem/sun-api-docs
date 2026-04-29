@@ -1,0 +1,77 @@
+---
+title: 鉴权
+description: '三种 API 格式的鉴权方式说明'
+---
+
+Sun API 的所有请求都需要在 HTTP 请求中携带令牌（Token）。令牌格式为 `sk-xxxxxxxx`，在管理后台的「令牌」页面创建。
+
+## 鉴权方式
+
+根据使用的 API 格式，鉴权 Header 不同：
+
+<AccordionGroup>
+  <Accordion title="OpenAI 格式 — Authorization Bearer" icon="bolt">
+    ```http
+    Authorization: Bearer sk-xxxxxxxx
+    ```
+
+    适用于所有 `/v1/chat/completions`、`/v1/responses`、`/v1/images/generations`、`/v1/embeddings` 等 OpenAI 风格接口。
+  </Accordion>
+
+  <Accordion title="Anthropic 格式 — x-api-key" icon="message">
+    ```http
+    x-api-key: sk-xxxxxxxx
+    anthropic-version: 2023-06-01
+    ```
+
+    适用于 `/v1/messages` 接口。`anthropic-version` 必传。
+  </Accordion>
+
+  <Accordion title="Gemini 格式 — x-goog-api-key 或 query" icon="sparkles">
+    Header 方式：
+    ```http
+    x-goog-api-key: sk-xxxxxxxx
+    ```
+
+    或 URL Query 方式（兼容 Google 官方文档示例）：
+    ```http
+    POST /v1beta/models/gemini-2.5-pro:generateContent?key=sk-xxxxxxxx
+    ```
+
+    适用于 `/v1beta/models/*` 接口。
+  </Accordion>
+</AccordionGroup>
+
+## 令牌管理
+
+<Steps>
+  <Step title="创建令牌">
+    管理后台 → **令牌** → **添加新令牌**
+  </Step>
+  <Step title="设置限制（可选）">
+    - **额度**：限制该令牌可消耗的总额
+    - **过期时间**：到期自动失效
+    - **模型范围**：限制只能调用某些模型
+    - **IP 白名单**：只允许特定 IP 使用
+  </Step>
+  <Step title="复制令牌">
+    令牌只在创建时显示一次，请妥善保存
+  </Step>
+</Steps>
+
+## 安全建议
+
+<Warning>
+  - 不要把令牌提交到 Git 仓库，使用环境变量 `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` 等
+  - 不要在前端代码中直接使用主令牌，应通过自己的后端转发
+  - 为不同应用创建独立令牌，便于审计和按需吊销
+  - 定期轮换令牌
+</Warning>
+
+## 常见错误
+
+| 状态码 | 原因 |
+|---|---|
+| `401` | 令牌缺失或无效 |
+| `403` | 令牌没有该模型的访问权限 |
+| `429` | 触发频率限制或额度耗尽 |

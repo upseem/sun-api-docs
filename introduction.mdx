@@ -1,0 +1,65 @@
+---
+title: 介绍
+description: '一个聚合 40+ 上游 AI 提供商的统一 API 网关，兼容 OpenAI / Anthropic / Gemini 三种官方接口格式。'
+---
+
+<img
+  className="block dark:hidden"
+  src="/images/hero-light.svg"
+  alt="Hero Light"
+  noZoom
+/>
+<img
+  className="hidden dark:block"
+  src="/images/hero-dark.svg"
+  alt="Hero Dark"
+  noZoom
+/>
+
+## 它是什么
+
+Sun API 是一个 AI API 中转网关，把各家 AI 提供商（OpenAI、Anthropic、Google、AWS Bedrock、Azure、阿里通义、字节豆包、Replicate、Midjourney、Suno 等 40+）聚合到统一接口下，并完整兼容三种主流 API 格式。
+
+<CardGroup cols={3}>
+  <Card title="OpenAI 格式" icon="bolt">
+    `POST /v1/chat/completions`
+    `POST /v1/responses`
+    `POST /v1/images/generations`
+  </Card>
+  <Card title="Anthropic 格式" icon="message">
+    `POST /v1/messages`
+    完全兼容 Claude 官方 SDK
+  </Card>
+  <Card title="Gemini 格式" icon="sparkles">
+    `POST /v1beta/models/*:generateContent`
+    完全兼容 Google GenAI SDK
+  </Card>
+</CardGroup>
+
+## 核心特性
+
+<CardGroup cols={2}>
+  <Card title="协议自动互转" icon="arrows-rotate">
+    用 OpenAI SDK 调 Claude 模型，或者用 Claude SDK 调 GPT —— 都自动适配，无需改代码。
+  </Card>
+  <Card title="任意上游" icon="globe">
+    OpenAI、Claude、Gemini、Bedrock、各国产模型、自部署 Ollama / vLLM 全支持。
+  </Card>
+  <Card title="生图 / 生视频" icon="image">
+    Midjourney、Sora、Kling、Vidu、Jimeng、Hailuo、Replicate、Suno 等异步任务接口全适配。
+  </Card>
+  <Card title="计费 / 限流 / 多租户" icon="shield">
+    令牌额度、按模型计费、用户分组、渠道负载均衡、表达式动态定价。
+  </Card>
+</CardGroup>
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="快速开始" icon="rocket" href="/quickstart">
+    5 分钟跑通第一个请求
+  </Card>
+  <Card title="鉴权说明" icon="key" href="/authentication">
+    三种 API 格式的认证方式
+  </Card>
+</CardGroup>

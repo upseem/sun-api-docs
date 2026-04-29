@@ -1,0 +1,118 @@
+---
+title: 快速开始
+description: '5 分钟跑通你的第一个请求'
+---
+
+## 1. 获取 API Key
+
+登录管理后台 → **令牌** → **添加新令牌** → 复制生成的 `sk-xxxxxxxx`。
+
+<Tip>
+  令牌可设置额度、过期时间、模型范围、IP 白名单。同一个用户可创建多个令牌用于不同应用。
+</Tip>
+
+## 2. 选择 API 格式
+
+Sun API 同时暴露三种格式，**用同一把 token、同一个域名**，根据客户端选择：
+
+<Tabs>
+  <Tab title="OpenAI 格式">
+
+  最常用。base URL 写到 `/v1`，鉴权用 `Authorization: Bearer`。
+
+  ```bash
+  curl https://your-domain.com/v1/chat/completions \
+    -H "Authorization: Bearer sk-xxxxxxxx" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "model": "gpt-4o",
+      "messages": [{"role": "user", "content": "你好"}]
+    }'
+  ```
+
+  </Tab>
+  <Tab title="Anthropic 格式">
+
+  Claude 官方 SDK 直接可用。base URL 写根域名，鉴权用 `x-api-key`。
+
+  ```bash
+  curl https://your-domain.com/v1/messages \
+    -H "x-api-key: sk-xxxxxxxx" \
+    -H "anthropic-version: 2023-06-01" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "model": "claude-sonnet-4-5",
+      "max_tokens": 1024,
+      "messages": [{"role": "user", "content": "你好"}]
+    }'
+  ```
+
+  </Tab>
+  <Tab title="Gemini 格式">
+
+  Google GenAI SDK 直接可用。base URL 写根域名，鉴权用 `x-goog-api-key` 或 `?key=`。
+
+  ```bash
+  curl "https://your-domain.com/v1beta/models/gemini-2.5-pro:generateContent" \
+    -H "x-goog-api-key: sk-xxxxxxxx" \
+    -H "Content-Type: application/json" \
+    -d '{
+      "contents": [{"parts": [{"text": "你好"}]}]
+    }'
+  ```
+
+  </Tab>
+</Tabs>
+
+## 3. 跨格式调用
+
+最重要的特性：**客户端用什么格式发，跟上游模型是哪家完全无关**。
+
+<CardGroup cols={2}>
+  <Card title="用 OpenAI SDK 调 Claude">
+    ```python
+    from openai import OpenAI
+    client = OpenAI(
+      api_key="sk-xxxxxxxx",
+      base_url="https://your-domain.com/v1"
+    )
+    client.chat.completions.create(
+      model="claude-sonnet-4-5",
+      messages=[{"role": "user", "content": "hi"}]
+    )
+    ```
+  </Card>
+  <Card title="用 Claude SDK 调 GPT">
+    ```python
+    from anthropic import Anthropic
+    client = Anthropic(
+      api_key="sk-xxxxxxxx",
+      base_url="https://your-domain.com"
+    )
+    client.messages.create(
+      model="gpt-4o",
+      max_tokens=1024,
+      messages=[{"role": "user", "content": "hi"}]
+    )
+    ```
+  </Card>
+</CardGroup>
+
+## 4. 桌面客户端
+
+下列客户端都支持自定义 base URL，配上去就能直接用：
+
+- **Cherry Studio** / **LobeChat** / **ChatBox** / **OpenWebUI**
+- **Cursor** / **Cline** / **Roo Code** / **Continue**
+- **Claude Code** / **Codex CLI**
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="完整 API 参考" icon="book" href="/api-reference/introduction">
+    所有接口的请求/响应详情
+  </Card>
+  <Card title="鉴权细节" icon="key" href="/authentication">
+    Header、Query、Body 三种 token 传递方式
+  </Card>
+</CardGroup>

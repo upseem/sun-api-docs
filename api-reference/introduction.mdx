@@ -1,0 +1,51 @@
+---
+title: API 参考概览
+description: '所有可用接口的快速索引'
+---
+
+## 接口分类
+
+<CardGroup cols={2}>
+  <Card title="对话接口" icon="message" href="/api-reference/chat/create-chat-completion">
+    OpenAI Chat、Claude Messages、Gemini GenerateContent 三种格式
+  </Card>
+  <Card title="图像生成" icon="image" href="/api-reference/images/create-image">
+    DALL·E、Imagen、FLUX、SDXL 等图像模型
+  </Card>
+  <Card title="视频生成" icon="film" href="/api-reference/videos/create-video">
+    Sora、Kling、Vidu、Jimeng、Hailuo 等视频模型
+  </Card>
+  <Card title="音频接口" icon="microphone" href="/api-reference/audio/transcriptions">
+    Whisper 转写、TTS 语音合成
+  </Card>
+  <Card title="向量与重排" icon="vector-square" href="/api-reference/embeddings/create-embedding">
+    Embeddings 与 Rerank 接口
+  </Card>
+  <Card title="模型列表" icon="list" href="/api-reference/models/list-models">
+    查询当前可用的模型清单
+  </Card>
+</CardGroup>
+
+## 通用约定
+
+### 请求头
+
+所有接口都需要 `Content-Type: application/json` 和对应格式的鉴权头。详见[鉴权](/authentication)。
+
+### 错误响应
+
+错误统一返回如下结构：
+
+```json
+{
+  "error": {
+    "message": "错误描述",
+    "type": "invalid_request_error",
+    "code": "model_not_found"
+  }
+}
+```
+
+### 流式响应
+
+支持流式的接口在请求体中传 `"stream": true` 即可，响应为 SSE（Server-Sent Events）格式。
