@@ -1,4 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="200" viewBox="0 0 800 200">
   <rect width="800" height="200" rx="12" fill="#F7FAF9"/>
-  <text x="400" y="115" text-anchor="middle" font-family="system-ui,sans-serif" font-size="40" font-weight="800" fill="#0D9373">Sun API Gateway</text>
+  <text x="400" y="115" text-anchor="middle" font-family="system-ui,sans-serif" font-size="40" font-weight="800" fill="#0D9373">SUNX AI API</text>
 </svg>
