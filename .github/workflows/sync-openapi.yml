@@ -1,0 +1,54 @@
+name: Sync OpenAPI from new-api
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *' # daily 06:00 UTC fallback
+  repository_dispatch:
+    types: [upstream-openapi-changed]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-openapi
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sun-api-docs
+        uses: actions/checkout@v4
+
+      - name: Sparse-checkout new-api openapi specs
+        uses: actions/checkout@v4
+        with:
+          repository: upseem/new-api
+          path: source-new-api
+          sparse-checkout: docs/openapi
+          sparse-checkout-cone-mode: false
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run sync script
+        env:
+          SERVER_URL: https://api.sunx.ai
+          SERVER_DESC: 生产环境
+        run: |
+          ./scripts/sync-openapi.sh "$GITHUB_WORKSPACE/source-new-api"
+
+      - name: Commit if changed
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if git diff --quiet api-reference/; then
+            echo "No changes."
+            exit 0
+          fi
+          git add api-reference/
+          git commit -m "docs: sync openapi from new-api ($(date -u +%Y-%m-%d))"
+          git push
