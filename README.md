@@ -44,9 +44,29 @@ mintlify dev
 
 ## 更新 OpenAPI 规范
 
-主项目 `new-api` 更新了 OpenAPI 后，同步两个 JSON 文件即可：
+主项目 `new-api` 更新了 OpenAPI 后，运行同步脚本：
 
 ```bash
-cp ../new-api/docs/openapi/relay.json ./api-reference/relay.json
-cp ../new-api/docs/openapi/api.json   ./api-reference/api.json
+# 默认从 ../new-api 拉取
+./scripts/sync-openapi.sh
+
+# 指定源仓库路径
+./scripts/sync-openapi.sh /path/to/new-api
+
+# 指定生产环境 URL
+SERVER_URL=https://api.example.com ./scripts/sync-openapi.sh
 ```
+
+脚本会自动：
+1. 复制 `docs/openapi/{relay,api}.json` 到本仓库 `api-reference/`
+2. 剥离 Apifox 导出的损坏 `Combination*` securitySchemes（缺 `openIdConnectUrl`，会让 Mintlify 校验失败）
+3. 注入 `servers` 字段，让接口页面显示正确的 base URL
+
+完成后：
+
+```bash
+git diff --stat api-reference/
+git add api-reference/ && git commit -m 'docs: sync openapi' && git push
+```
+
+Mintlify 监听到 push 会自动重建。
