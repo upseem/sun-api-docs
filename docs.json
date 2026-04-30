@@ -90,13 +90,13 @@
     "links": [
       {
         "label": "管理后台",
-        "href": "https://your-domain.com"
+        "href": "https://api.sunx.ai"
       }
     ],
     "primary": {
       "type": "button",
       "label": "开始使用",
-      "href": "https://your-domain.com/register"
+      "href": "https://api.sunx.ai/register"
     }
   },
   "footer": {
