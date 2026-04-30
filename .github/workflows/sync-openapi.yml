@@ -25,6 +25,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: upseem/new-api
+          # PAT with `contents: read` on upseem/new-api (private)
+          # and `contents: write` on this repo. Same token used by new-api
+          # to dispatch into this repo, so reuse one secret for both.
+          token: ${{ secrets.DOCS_DISPATCH_TOKEN }}
           path: source-new-api
           sparse-checkout: docs/openapi
           sparse-checkout-cone-mode: false
